@@ -38,7 +38,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
 import com.example.formdata.DataSource.jenis
 import com.example.formpageapp.Data.Cobaviewmodel
 import com.example.formpageapp.Data.DataForm
@@ -88,6 +87,7 @@ fun TampilForm(cobaviewmodel: Cobaviewmodel = Cobaviewmodel()) {
     var textNama by remember { mutableStateOf("") }
     var textTlp by remember { mutableStateOf("") }
     var textAlt by remember { mutableStateOf("") }
+    var texteml by remember { mutableStateOf("")}
 
     val context = LocalContext.current
     val dataForm: DataForm
@@ -125,6 +125,15 @@ fun TampilForm(cobaviewmodel: Cobaviewmodel = Cobaviewmodel()) {
             textAlt = it
         }
     )
+    OutlinedTextField(
+        value = texteml,
+        singleLine = true,
+        shape = MaterialTheme.shapes.large,
+        modifier = Modifier.fillMaxWidth(),
+        label = { Text(text = "Email")},
+        onValueChange = {
+            texteml = it
+        })
 
     SelectJK(
         options = jenis.map { id -> context.resources.getString(id)},
@@ -132,7 +141,7 @@ fun TampilForm(cobaviewmodel: Cobaviewmodel = Cobaviewmodel()) {
     Button(
         modifier = Modifier.fillMaxWidth(),
         onClick = {
-            cobaviewmodel.BacaData(textNama,textTlp, dataForm.sex, textAlt)
+            cobaviewmodel.BacaData(textNama,textTlp, textAlt, texteml, dataForm.sex,)
         }
     ) {
         Text(
