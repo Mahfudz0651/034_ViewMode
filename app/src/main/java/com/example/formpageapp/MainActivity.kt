@@ -66,7 +66,9 @@ class MainActivity : ComponentActivity() {
 fun TampilLayout(
     modifier: Modifier = Modifier
 ) {
+
     Card(
+
         modifier = modifier,
         elevation = CardDefaults.cardElevation(defaultElevation = 5.dp)
     ) {
@@ -125,6 +127,7 @@ fun TampilForm(cobaviewmodel: Cobaviewmodel = Cobaviewmodel()) {
             textAlt = it
         }
     )
+
     OutlinedTextField(
         value = texteml,
         singleLine = true,
@@ -133,32 +136,8 @@ fun TampilForm(cobaviewmodel: Cobaviewmodel = Cobaviewmodel()) {
         label = { Text(text = "Email")},
         onValueChange = {
             texteml = it
-        })
-
-    SelectJK(
-        options = jenis.map { id -> context.resources.getString(id)},
-        onSelectionChanged = {cobaviewmodel.setJenis(it)})
-    Button(
-        modifier = Modifier.fillMaxWidth(),
-        onClick = {
-            cobaviewmodel.BacaData(textNama,textTlp, textAlt, texteml, dataForm.sex,)
         }
-    ) {
-        Text(
-            text = stringResource(R.string.submit),
-            fontSize = 16.sp
-        )
-    }
-    Spacer(modifier = Modifier.height(100.dp))
-    TextHasil(
-        namanya = cobaviewmodel.namaUsr,
-        telponnya = cobaviewmodel.noTlp,
-        jenisnya = cobaviewmodel.jenisKl,
-        alamatnya = cobaviewmodel.alamat,
-        emailnya = cobaviewmodel.email,
-
     )
-}
     @Composable
     fun SelectJK(
         options: List<String>,
@@ -191,6 +170,64 @@ fun TampilForm(cobaviewmodel: Cobaviewmodel = Cobaviewmodel()) {
             }
         }
     }
+    @Composable
+    fun SelectStatus(
+        options: List<String>,
+        onSelectionChanged: (String) -> Unit = {}
+    ) {
+        var selectedValue by rememberSaveable { mutableStateOf("") }
+
+        Column(modifier = Modifier.padding(16.dp)) {
+            options.forEach { item ->
+                Row(
+                    modifier = Modifier.selectable(
+                        selected = selectedValue == item,
+                        onClick = {
+                            selectedValue = item
+                            onSelectionChanged(item)
+                        }
+                    ),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    RadioButton(
+                        selected = selectedValue == item,
+                        onClick = {
+                            selectedValue = item
+
+                            onSelectionChanged(item)
+                        }
+                    )
+                    Text(item)
+                }
+            }
+        }
+    }
+
+    SelectJK(
+        options = jenis.map { id -> context.resources.getString(id)},
+        onSelectionChanged = {cobaviewmodel.setJenis(it)})
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = {
+            cobaviewmodel.BacaData(textNama,textTlp, textAlt, texteml, dataForm.sex,)
+        }
+    ) {
+        Text(
+            text = stringResource(R.string.submit),
+            fontSize = 16.sp
+        )
+    }
+    Spacer(modifier = Modifier.height(100.dp))
+    TextHasil(
+        namanya = cobaviewmodel.namaUsr,
+        telponnya = cobaviewmodel.noTlp,
+        jenisnya = cobaviewmodel.jenisKl,
+        alamatnya = cobaviewmodel.alamat,
+        emailnya = cobaviewmodel.email,
+
+    )
+}
+
 
     @Composable
     fun TextHasil(namanya: String, telponnya: String, jenisnya: String, alamatnya: String, emailnya: String) {
